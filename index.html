@@ -185,7 +185,7 @@
         .logo-text {
             font-family: 'Avenir Next', 'Avenir', 'Helvetica Neue', sans-serif;
             font-size: 1.8rem;
-            font-weight: 400;
+            font-weight: 900;
             font-style: italic;
             background: var(--gradient-brand);
             -webkit-background-clip: text;
@@ -194,6 +194,8 @@
             letter-spacing: 1px;
             filter: drop-shadow(0 0 12px hsla(185, 90%, 60%, 0.55)) drop-shadow(0 0 28px hsla(325, 90%, 60%, 0.35));
             transition: transform var(--transition-smooth);
+            transform: translateY(1px);
+            /* Fine-tune horizontal alignment with image */
         }
 
         .logo:hover .logo-text {
@@ -631,8 +633,6 @@
         /* ========== Responsiveness ========== */
         @media (max-width: 768px) {
             header {
-                flex-direction: column;
-                gap: 0.8rem;
                 padding: 0.8rem 5%;
             }
 

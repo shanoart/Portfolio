@@ -261,21 +261,22 @@
             background: var(--text-primary);
             border-radius: 2px;
             transition: all var(--transition-smooth);
-            transform-origin: left;
+            transform-origin: center;
+            /* Center-origin for perfect X */
         }
 
-        /* Hamburger to X Animation */
+        /* Hamburger to X Animation (Precise centering) */
         .mobile-menu-toggle.active span:nth-child(1) {
-            transform: rotate(45deg);
+            transform: translateY(9.5px) rotate(45deg);
         }
 
         .mobile-menu-toggle.active span:nth-child(2) {
             opacity: 0;
-            transform: translateX(20px);
+            transform: scale(0);
         }
 
         .mobile-menu-toggle.active span:nth-child(3) {
-            transform: rotate(-45deg);
+            transform: translateY(-9.5px) rotate(-45deg);
         }
 
         /* ========== Hero Section ========== */
@@ -692,14 +693,30 @@
                 right: -100%;
                 width: 100%;
                 height: 100vh;
-                background: var(--bg-dark);
-                background-image: radial-gradient(circle at top right, hsla(185, 90%, 55%, 0.1), transparent 400px),
-                    radial-gradient(circle at bottom left, hsla(325, 90%, 60%, 0.05), transparent 400px);
+                background: hsla(220, 40%, 8%, 0.85);
+                /* Semi-transparent base */
+                backdrop-filter: blur(25px) saturate(1.8);
+                /* Strong Opal/Glass effect */
+                -webkit-backdrop-filter: blur(25px) saturate(1.8);
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 transition: right 0.4s cubic-bezier(0.77, 0, 0.175, 1);
                 z-index: 1050;
+                border-left: 1px solid hsla(185, 90%, 55%, 0.2);
+                /* Subtle identifer */
+                box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
+            }
+
+            nav::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-image: radial-gradient(circle at top right, hsla(185, 90%, 55%, 0.15), transparent 400px);
+                pointer-events: none;
             }
 
             nav.active {

@@ -241,6 +241,43 @@
             width: 100%;
         }
 
+        /* ========== Mobile Menu Toggle ========== */
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 1100;
+            padding: 0;
+        }
+
+        .mobile-menu-toggle span {
+            width: 100%;
+            height: 2px;
+            background: var(--text-primary);
+            border-radius: 2px;
+            transition: all var(--transition-smooth);
+            transform-origin: left;
+        }
+
+        /* Hamburger to X Animation */
+        .mobile-menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg);
+        }
+
+        .mobile-menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+            transform: translateX(20px);
+        }
+
+        .mobile-menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg);
+        }
+
         /* ========== Hero Section ========== */
         .hero {
             min-height: 85vh;
@@ -633,9 +670,8 @@
         /* ========== Responsiveness ========== */
         @media (max-width: 768px) {
             header {
-                padding: 0.8rem 5%;
+                padding: 1rem 5%;
                 justify-content: space-between;
-                gap: 0.5rem;
             }
 
             .logo img {
@@ -646,13 +682,39 @@
                 font-size: 1.4rem;
             }
 
+            .mobile-menu-toggle {
+                display: flex;
+            }
+
+            nav {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 100%;
+                height: 100vh;
+                background: var(--bg-dark);
+                background-image: radial-gradient(circle at top right, hsla(185, 90%, 55%, 0.1), transparent 400px),
+                    radial-gradient(circle at bottom left, hsla(325, 90%, 60%, 0.05), transparent 400px);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: right 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+                z-index: 1050;
+            }
+
+            nav.active {
+                right: 0;
+            }
+
             nav ul {
-                gap: 0.8rem;
+                flex-direction: column;
+                align-items: center;
+                gap: 3rem;
             }
 
             nav a {
-                font-size: 0.7rem;
-                letter-spacing: 0.5px;
+                font-size: 1.5rem;
+                letter-spacing: 3px;
             }
 
             .hero {
@@ -718,13 +780,19 @@
             <img src="shano logo last 3.png" alt="Shano Art Logo">
             <span class="logo-text">Shano Art</span>
         </div>
-        <nav>
+        <nav id="mobileNav">
             <ul>
                 <li><a href="#work">Work</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
+
+        <button class="mobile-menu-toggle" id="menuToggle" aria-label="Toggle Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </header>
 
     <section class="hero" id="home">
@@ -844,6 +912,26 @@
         }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
         revealElements.forEach(el => observer.observe(el));
+
+        // Mobile Menu Logic
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileNav = document.getElementById('mobileNav');
+        const navLinks = document.querySelectorAll('nav a');
+
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            mobileNav.classList.toggle('active');
+            document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
+        });
+
+        // Close menu when a link is clicked
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggle.classList.remove('active');
+                mobileNav.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
     </script>
 
 </body>

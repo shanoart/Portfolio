@@ -972,6 +972,70 @@
         <p>&copy; 2026 Shano Art. All rights reserved.</p>
     </footer>
 
+    <!-- Maintenance Check Script -->
+    <script>
+        const API_URL = 'https://shanoart2026-portfolio.hf.space';
+
+        async function checkMaintenance() {
+            try {
+                // If there's no connection, silently fail and let the user see the cached site if any
+                if (!navigator.onLine) return;
+
+                const res = await fetch(`${API_URL}/status`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.maintenance) {
+                        // Replace entire DOM with maintenance screen
+                        document.documentElement.innerHTML = `
+                            <head>
+                                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                <title>Under Maintenance - Shano Art</title>
+                                <style>
+                                    body { 
+                                        background-color: hsl(220, 50%, 6%); 
+                                        color: hsl(210, 30%, 92%); 
+                                        font-family: 'Inter', sans-serif;
+                                        display: flex;
+                                        flex-direction: column;
+                                        justify-content: center;
+                                        align-items: center;
+                                        height: 100vh;
+                                        margin: 0;
+                                        text-align: center;
+                                    }
+                                    h1 { color: hsl(185, 90%, 55%); font-size: 3rem; margin-bottom: 1rem; font-family: 'Playfair Display', serif; }
+                                    p { font-size: 1.1rem; color: hsl(210, 15%, 65%); max-width: 500px; padding: 0 20px; line-height: 1.6; }
+                                    .loader {
+                                        border: 3px solid rgba(255,255,255,0.05);
+                                        border-left-color: hsl(185, 90%, 55%);
+                                        border-radius: 50%;
+                                        width: 50px;
+                                        height: 50px;
+                                        animation: spin 1s linear infinite;
+                                        margin-bottom: 2.5rem;
+                                    }
+                                    @keyframes spin { 100% { transform: rotate(360deg); } }
+                                </style>
+                            </head>
+                            <body>
+                                <div class="loader"></div>
+                                <h1>Under Maintenance</h1>
+                                <p>We are currently updating the Shano Art website to bring you a better experience. Please check back soon!</p>
+                            </body>
+                        `;
+                    }
+                }
+            } catch (err) {
+                console.error("Maintenance check failed:", err);
+            }
+        }
+
+        // Check immediately on load
+        checkMaintenance();
+        // Also check periodically every 30 seconds
+        setInterval(checkMaintenance, 30000);
+    </script>
+
     <script>
         // Scroll-reveal animation
         const revealElements = document.querySelectorAll('.reveal');

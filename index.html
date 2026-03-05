@@ -415,6 +415,19 @@
             display: flex;
         }
 
+        /* Responsive Visibility */
+        @media (max-width: 768px) {
+            .desktop-only-showcase {
+                display: none !important;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-only-showcase {
+                display: none !important;
+            }
+        }
+
         .image-hover-container .ihc-wrap {
             position: relative;
             height: clamp(500px, 70vh, 900px);
@@ -585,7 +598,8 @@
         /* ---- Responsive scatter ---- */
         @media (max-width: 920px) {
             .image-hover-container {
-                overflow: hidden;
+                overflow: visible;
+                /* Allow fixed zoom to work */
             }
 
             .ihc-wrap.active .item-1 {
@@ -626,28 +640,50 @@
             /* Zig-zag vertical fan */
             .ihc-wrap.active .ihc-item {
                 width: 80%;
-                height: 300px;
+                height: 240px;
+                /* "Proper" smaller size */
                 position: absolute;
                 cursor: pointer;
-                /* Suggest interaction */
+                transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+                    opacity 0.4s ease, filter 0.4s ease;
             }
 
-            /* Mobile Tap to Enlarge */
+            /* Mobile Tap to Center-Zoom */
             .ihc-wrap.active .ihc-item.tapped {
-                transform: scale(1.1) rotate(0deg) !important;
-                z-index: 50 !important;
-                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                width: 90vw;
+                height: 60vh;
+                transform: translate(-50%, -50%) scale(1.1) !important;
+                z-index: 9999 !important;
+                box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
                 opacity: 1 !important;
+                filter: none !important;
             }
 
             .ihc-wrap.active .ihc-item.tapped img {
-                transform: scale(1.05);
+                transform: scale(1);
             }
 
-            /* Dim others when one is tapped on mobile */
+            /* Dim others and add backdrop when one is tapped on mobile */
             .ihc-wrap.active.has-tapped .ihc-item:not(.tapped) {
-                opacity: 0.4;
-                filter: grayscale(100%);
+                opacity: 0.2;
+                filter: grayscale(100%) blur(2px);
+            }
+
+            /* Modal Backdrop Overlay */
+            .ihc-wrap.active.has-tapped::before {
+                content: '';
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.8);
+                backdrop-filter: blur(5px);
+                z-index: 9990;
+                pointer-events: none;
             }
 
             .ihc-wrap.active .item-1 {
@@ -1097,35 +1133,41 @@
             <div class="accent-line"></div>
         </div>
 
-        <!-- Master 8-Image Pack -->
-        <div class="image-hover-container">
+        <!-- Desktop Version: One 8-Image Spread -->
+        <div class="image-hover-container desktop-only-showcase">
             <div class="ihc-wrap">
-                <div class="ihc-item item-1">
-                    <img src="1.jpg" alt="Artwork 1">
+                <div class="ihc-item item-1"><img src="1.jpg" alt="Art 1"></div>
+                <div class="ihc-item item-2"><img src="2.jpg" alt="Art 2"></div>
+                <div class="ihc-item item-3"><img src="3.jpg" alt="Art 3"></div>
+                <div class="ihc-item item-4"><img src="4.jpg" alt="Art 4"></div>
+                <div class="ihc-item item-5"><img src="5.jpg" alt="Art 5"></div>
+                <div class="ihc-item item-6"><img src="6.jpg" alt="Art 6"></div>
+                <div class="ihc-item item-7"><img src="7.jpg" alt="Art 7"></div>
+                <div class="ihc-item item-8"><img src="8.jpg" alt="Art 8"></div>
+            </div>
+        </div>
+
+        <!-- Mobile Version: Two 4-Image Packs -->
+        <div class="mobile-only-showcase">
+            <div class="image-hover-container">
+                <div class="ihc-wrap">
+                    <div class="ihc-item item-1"><img src="1.jpg" alt="Art 1"></div>
+                    <div class="ihc-item item-2"><img src="2.jpg" alt="Art 2"></div>
+                    <div class="ihc-item item-3"><img src="3.jpg" alt="Art 3"></div>
+                    <div class="ihc-item item-4"><img src="4.jpg" alt="Art 4"></div>
                 </div>
-                <div class="ihc-item item-2">
-                    <img src="2.jpg" alt="Artwork 2">
-                </div>
-                <div class="ihc-item item-3">
-                    <img src="3.jpg" alt="Artwork 3">
-                </div>
-                <div class="ihc-item item-4">
-                    <img src="4.jpg" alt="Artwork 4">
-                </div>
-                <div class="ihc-item item-5">
-                    <img src="5.jpg" alt="Artwork 5">
-                </div>
-                <div class="ihc-item item-6">
-                    <img src="6.jpg" alt="Artwork 6">
-                </div>
-                <div class="ihc-item item-7">
-                    <img src="7.jpg" alt="Artwork 7">
-                </div>
-                <div class="ihc-item item-8">
-                    <img src="8.jpg" alt="Artwork 8">
+            </div>
+            <div class="image-hover-container">
+                <div class="ihc-wrap">
+                    <div class="ihc-item item-5"><img src="5.jpg" alt="Art 5"></div>
+                    <div class="ihc-item item-6"><img src="6.jpg" alt="Art 6"></div>
+                    <div class="ihc-item item-7"><img src="7.jpg" alt="Art 7"></div>
+                    <div class="ihc-item item-8"><img src="8.jpg" alt="Art 8"></div>
                 </div>
             </div>
         </div>
+
+
     </section>
 
     <section class="about-section" id="about">

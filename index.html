@@ -628,6 +628,26 @@
                 width: 80%;
                 height: 300px;
                 position: absolute;
+                cursor: pointer;
+                /* Suggest interaction */
+            }
+
+            /* Mobile Tap to Enlarge */
+            .ihc-wrap.active .ihc-item.tapped {
+                transform: scale(1.1) rotate(0deg) !important;
+                z-index: 50 !important;
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+                opacity: 1 !important;
+            }
+
+            .ihc-wrap.active .ihc-item.tapped img {
+                transform: scale(1.05);
+            }
+
+            /* Dim others when one is tapped on mobile */
+            .ihc-wrap.active.has-tapped .ihc-item:not(.tapped) {
+                opacity: 0.4;
+                filter: grayscale(100%);
             }
 
             .ihc-wrap.active .item-1 {
@@ -1247,20 +1267,49 @@
 
         revealElements.forEach(el => observer.observe(el));
 
-        // Showcase Scroll Activation
+        // Showcase Scroll Activation with Delay
         const showcaseWraps = document.querySelectorAll('.ihc-wrap');
         const showcaseObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                // Add 'active' class when it comes into view, remove when it leaves
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
+                    // Small cinematic delay before scattering
+                    setTimeout(() => {
+                        if (entry.isIntersecting) { // Double check still in view
+                            entry.target.classList.add('active');
+                        }
+                    }, 300);
                 } else {
                     entry.target.classList.remove('active');
+                    // Reset mobile taps when leaving section
+                    entry.target.classList.remove('has-tapped');
+                    entry.target.querySelectorAll('.ihc-item').forEach(item => item.classList.remove('tapped'));
                 }
             });
-        }, { threshold: 0.5 }); // Trigger when 50% is visible
+        }, { threshold: 0.5 });
 
         showcaseWraps.forEach(wrap => showcaseObserver.observe(wrap));
+
+        // Mobile Touch Interaction
+        const ihcItems = document.querySelectorAll('.ihc-item');
+        ihcItems.forEach(item => {
+            item.addEventListener('click', function (e) {
+                // Only logic for mobile/tablet sizes where hover isn't standard
+                if (window.innerWidth <= 768) {
+                    const wrap = this.parentElement;
+                    const isAlreadyTapped = this.classList.contains('tapped');
+
+                    // Clear all other taps in this wrap
+                    wrap.querySelectorAll('.ihc-item').forEach(el => el.classList.remove('tapped'));
+
+                    if (!isAlreadyTapped) {
+                        this.classList.add('tapped');
+                        wrap.classList.add('has-tapped');
+                    } else {
+                        wrap.classList.remove('has-tapped');
+                    }
+                }
+            });
+        });
 
         // Mobile Menu Logic
         const menuToggle = document.getElementById('menuToggle');
